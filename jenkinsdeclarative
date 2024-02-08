@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+    
+    tools{
+        maven "maven3.9.6"
+    }
+    
+    triggers{
+        
+        //pollscm
+        pollSCM('* * * * *')
+        //build periodecally
+        //cron('* * * * *')
+        //webhook
+        //githubPush()
+    }
+    
+    stages {
+        stage('GitCheckOut') {
+            steps {
+                git credentialsId: '956230b7-9444-4a64-a288-317fb8a79f6c', url: 'https://github.com/nomraj-devops/maven-web-application.git'
+            }
+        }
+        
+        stage('Build Package') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        
+        stage('Execute SonarQube Report') {
+            steps {
+                sh "mvn clean sonar:sonar"
+            }
+        }
+        
+        stage('UploadArticatoryintoNexus') {
+            steps {
+                sh "mvn clean deploy"
+            }
+        }
+        
+        stage('DeployApplicationintoTomcatServer') {
+            steps {
+                sshagent(['0fbd36a5-665a-4d8a-9269-e3953e738054']) {
+          sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.233.84.3:/opt/apache-tomcat-9.0.85/webapps/"
+ 
+           }
+            }
+        }
+        
+        
+    }//stages closing
+    
+    post{
+        
+        always{
+            emailext body: '''pipeline is success oralways
+
+    Regards
+    Nomraj
+    DevOps
+    9398236773''', subject: 'pipeline is successfull....', to: 'nomraj1994@gmail.com'
+
+            
+        }
+        
+        failure{
+            
+            emailext body: '''pipeline is failue..
+
+    Regards
+    Nomraj
+    DevOps
+    9398236773''', subject: 'pipeline is successfull....', to: 'nomraj1994@gmail.com'
+
+            
+        }
+        
+        success{
+            
+            emailext body: '''pipeline is successfull....
+
+    Regards
+    Nomraj
+    DevOps
+    9398236773''', subject: 'pipeline is successfull....', to: 'nomraj1994@gmail.com'
+
+            
+        }
+        
+    }
+}//pipeline closing
