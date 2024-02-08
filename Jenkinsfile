@@ -25,7 +25,7 @@ node{
 	stage('Deploy BuildArtifactory InTo Nexsus Server')
 	{
 	sshagent(['0fbd36a5-665a-4d8a-9269-e3953e738054']) {
-   sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.232.54.227:/opt/apache-tomcat-9.0.85/webapps/"
+   sh "scp -o  StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.233.84.3:/opt/apache-tomcat-9.0.85/webapps/"
     }
 	}
 	
