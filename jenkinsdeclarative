@@ -10,7 +10,7 @@ label 'wallmart-dev'
     triggers{
         
         //pollscm
-        pollSCM('* * * * *')
+        //pollSCM('* * * * *')
         //build periodecally
         //cron('* * * * *')
         //webhook
