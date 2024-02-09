@@ -1,4 +1,4 @@
-node('nodes'){
+node('wallmart-qa'){
     
     def mavenHome = tool name : "maven3.9.6"
 	
