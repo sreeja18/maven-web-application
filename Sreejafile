@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    tools {
+    maven "maven"
+    }
+
+    stages{
+       stage('Checkoutcode') {
+            steps {
+                git credentialsId: '51f870a8-5203-4b15-88d9-6a5b1cc0f6ae', url: 'https://github.com/sreeja18/maven-web-application.git'
+            }
+          }
+      stage('Built') {
+            steps {
+                sh "mvn clean package"
+            }
+      }
+        
+    }
+
+
+
+}
